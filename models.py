@@ -2,14 +2,13 @@ import os
 
 from peewee import Model, MySQLDatabase, CharField, DecimalField, DateField, ForeignKeyField
 
-mysql_db = MySQLDatabase(os.environ.get('MYSQL_DATABASE'), user=os.environ.get('MYSQL_USER'), password=os.environ.get('MYSQL_PASSWORD'),
-                         host='localhost', port=3306)
+from database import mysql_db, proxy
 
 
 class BaseModel(Model):
     """A base model that will use our MySQL database"""
     class Meta:
-        database = mysql_db
+        database = proxy
 
 
 class Utenti(BaseModel):

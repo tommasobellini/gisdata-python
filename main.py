@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from datetime import datetime
 
 import aiocron
 from models import Utenti, Operazioni
@@ -13,8 +14,8 @@ async def create_report(utente):
     :param utente:
     :return:
     """
-    nome_file = "{}.txt".format(utente.id)
-    f = open(nome_file, "w")
+    nome_file = "./reports/{}.txt".format(utente.id)
+    f = open(nome_file, "w+")
     f.write(utente.nome)
     logging.info("Processando report per {}".format(utente.nome))
     operazioni = Operazioni.filter(utente_id=utente.id).order_by(Operazioni.giorno)
@@ -37,7 +38,7 @@ async def create_report(utente):
 
 # crontab del pacchetto aiocron, schedulato ogni mezzanotte
 # (per testare si può sostituire lo 0 con un *, in modo che parta ogni minuto)
-@aiocron.crontab('0 * * * *')
+@aiocron.crontab('* * * * *')
 def report_generator():
     """
     Questo scheduler prende inizialmente gli utenti della tabella e successivamente
@@ -48,10 +49,11 @@ def report_generator():
     try:
         utenti = Utenti.select()
         for utente in utenti:
-            logging.info('Inizio generazione report per utente id: {} nome: {}'.format(utente.id, utente.nome))
+            logging.info('{} : Inizio generazione report per utente id: {} nome: {}'.format(datetime.now(), utente.id, utente.nome))
             asyncio.get_event_loop().create_task(create_report(utente))
     except Exception as e:
         logging.error('Qualcosa è andato storto. Dettaglio errore: {}'.format(e.__str__()))
 
 
+logging.info("Script partito correttamente.")
 asyncio.get_event_loop().run_forever()

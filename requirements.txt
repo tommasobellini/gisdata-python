@@ -1,2 +1,10 @@
 aiocron==1.7
+backports.zoneinfo==0.2.1
+croniter==1.0.15
 peewee==3.14.4
+PyMySQL==1.0.2
+python-dateutil==2.8.2
+pytz-deprecation-shim==0.1.0.post0
+six==1.16.0
+tzdata==2021.5
+tzlocal==4.0.2
