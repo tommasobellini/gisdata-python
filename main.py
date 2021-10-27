@@ -1,8 +1,8 @@
+import os
 import asyncio
+import aiocron
 import logging
 from datetime import datetime
-
-import aiocron
 from models import Utenti, Operazioni
 
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +15,7 @@ async def create_report(utente):
     :return:
     """
     nome_file = "./reports/{}.txt".format(utente.id)
+    os.makedirs(os.path.dirname(nome_file), exist_ok=True)
     f = open(nome_file, "w+")
     f.write(utente.nome)
     logging.info("Processando report per {}".format(utente.nome))

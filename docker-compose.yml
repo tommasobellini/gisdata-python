@@ -13,7 +13,7 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     volumes:
-      - .:/edilcloud-back
+      - .:/gisdata-python
     ports:
       - "8000:8000"
     environment:
