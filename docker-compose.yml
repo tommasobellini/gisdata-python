@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    networks:
+      - streams
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=edilcloud-back
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 web.asgi:application --settings=web.settings.production
+    volumes:
+      - .:/edilcloud-back
+    ports:
+      - "8000:8000"
+    networks:
+      - streams
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=Oneplus3t
+      - ENV_NAME=prod
+      - SOCKET_HOST=35.178.108.7
+      - SOCKET_PORT=6969
